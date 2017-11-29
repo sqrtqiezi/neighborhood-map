@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.bootcss.com/semantic-ui/2.2.13/semantic.min.css" rel="stylesheet">
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    .pusher {
+      height: 100%;
+    }
+
+    #map {
+      height: calc(100% - 3.2em);
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .ui.masthead.segment {
+      padding: 1em 1em;
+    }
+
+    .ui.menu .item > .input {
+      max-width: 12em;
+    }
+
+    .ui.sidebar.menu .item:first-of-type {
+      padding: 1.2em 1em;
+    }
+  </style>
+</head>
+<body class="pushable">
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+  <a class="item title">宁波咖啡客</a>
+  <div class="item">
+    <div class="ui labeled inverted small input">
+      <div class="ui label">最低消费</div>
+      <input type="text" placeholder=""  data-bind="textInput: consumptionLimit" >
+    </div>
+  </div>
+  <div id="todo-list" data-bind="foreach: filteredHouses">
+    <a href="#" class="item" data-bind="text: name"></a>
+  </div>
+</div>
+
+
+<div class="pusher">
+  <div class="ui inverted vertical masthead segment">
+    <a href="#" class="toc item">
+      <i class="sidebar icon"></i>
+    </a>
+  </div>
+  <div id="map"></div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/semantic-ui/2.2.13/semantic.min.js"></script>
+<script src="https://cdn.bootcss.com/knockout/3.4.2/knockout-min.js"></script>
+<script src="./dist/bundle.js"></script>
+<script>
+  function initMap () {
+    var map = new AMap.Map('map', {
+      center: [121.5718769, 29.8600041],
+      zoom: 13
+    })
+    map.plugin(['AMap.ToolBar'], function () {
+      map.addControl(new AMap.ToolBar())
+    })
+    mapReady(map)
+  }
+
+  $(document).ready(function () {
+    $('.ui.sidebar').sidebar('attach events', '.toc.item')
+  })
+</script>
+<script src="http://webapi.amap.com/maps?v=1.4.0&amp;key=57704a6cd13bff6b61009e321fcd3005&callback=initMap"></script>
+</body>
+</html>
