@@ -1,16 +1,18 @@
 import { getCoffeeHouses } from './lib/api'
 
+let aMap
+
 class CoffeeHouse {
   constructor (name, address, location, consumption) {
     this.name = name
     this.address = address
-    this.location = location
+    this.location = [location.longitude, location.latitude]
     this.consumption = consumption
     this.status = 'hiden'
   }
 
   // 显示标记点
-  show (map) {
+  show () {
     if (this.status === 'visible') {
       return
     }
@@ -19,35 +21,44 @@ class CoffeeHouse {
       this.marker.show()
     } else {
       this.marker = new AMap.Marker({
-        position: [this.location.longitude, this.location.latitude],
+        position: this.location,
         title: this.name,
         icon: './images/coffee.png'
       })
-      this.marker.setMap(map)
-      this.marker.on('click',  (e) => {
-        this.infoWindow.open(map, e.target.getPosition())
+      this.marker.setMap(aMap)
+      this.marker.on('click', () => {
+        this.openInfo()
       })
     }
   }
 
   // 隐藏标记点
   hide () {
-    if (this.status === 'hiden') {
+    if (!this.marker || this.status === 'hiden') {
       return
     }
     this.status = 'hiden'
     this.marker.hide()
   }
 
-  get infoWindow () {
-    const content = `<div class="infowindow-content">
-      <div class="amap-info-header">${this.name}</div>
-      <div class="amap-info-body">${this.address}<br/>最低消费:${this.consumption}</div>
-    </div>`
-    return new AMap.InfoWindow({
-      content: content,
-      offset: new AMap.Pixel(16, -50)
-    })
+  openInfo () {
+    if (!this.infoWindow) {
+      const content = `<div class="infowindow-content">
+        <div class="amap-info-header">${this.name}</div>
+        <div class="amap-info-body">${this.address}<br/>最低消费:${this.consumption}</div>
+      </div>`
+      this.infoWindow = new AMap.InfoWindow({
+        content: content,
+        offset: new AMap.Pixel(10, -30)
+      })
+    }
+    this.infoWindow.open(aMap, this.location)
+  }
+
+  display () {
+    aMap.setCenter(this.location)
+    aMap.setZoom(16)
+    this.openInfo()
   }
 }
 
@@ -68,9 +79,17 @@ class ViewModel {
     })
 
     this.renderCount = 0
-    this.consumptionLimit.subscribe(() => {
+    this.consumptionLimit.subscribe((newValue) => {
+      if (newValue === '') {
+        setTimeout(() => {
+          if (this.consumptionLimit() === '') {
+            this.consumptionLimit(0)
+          }
+        }, 800)
+      }
+
       //当过滤数据发生变动时，延迟一秒重新绘制地图上的标记点
-      //多次变动，以最后一次变动值进行绘制
+      //如果有多次变动，以最后一次变动值进行绘制
       this.renderCount++
       setTimeout(() => {
         this.renderCount--
@@ -95,9 +114,13 @@ class ViewModel {
     }
   }
 
+  displayHouse (house) {
+    house.display()
+  }
+
   renderMarker () {
     this.filteredHouses().forEach((house) => {
-      house.show(this.map)
+      house.show()
     })
     this.unFilteredHouses().forEach((house) => {
       house.hide()
@@ -129,5 +152,5 @@ viewModel.loadData().then(function () {
 
 window.mapReady = function mapReady (map) {
   viewModel.mapStatus('ready')
-  viewModel.map = map
+  aMap = map
 }

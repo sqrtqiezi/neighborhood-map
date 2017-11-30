@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>咖啡客</title>
   <link href="https://cdn.bootcss.com/semantic-ui/2.2.13/semantic.min.css" rel="stylesheet">
   <style>
     /* Always set the map height explicitly to define the size of the div
@@ -42,7 +42,7 @@
 
 <!-- Sidebar Menu -->
 <div class="ui vertical inverted sidebar menu">
-  <a class="item title">宁波咖啡客</a>
+  <a class="item title">咖啡客</a>
   <div class="item">
     <div class="ui labeled inverted small input">
       <div class="ui label">最低消费</div>
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div id="todo-list" data-bind="foreach: filteredHouses">
-    <a href="#" class="item" data-bind="text: name"></a>
+    <a href="#" class="item" data-bind="text: name, click: $parent.displayHouse"></a>
   </div>
 </div>
 
