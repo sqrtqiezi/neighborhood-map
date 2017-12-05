@@ -30,7 +30,9 @@ class CoffeeHouse {
     return result.join('')
   }
 
-  // 显示标记点
+  /**
+   * 显示标记点
+   */
   show () {
     if (this.status === 'visible') {
       return
@@ -51,7 +53,9 @@ class CoffeeHouse {
     }
   }
 
-  // 隐藏标记点
+  /**
+   * 隐藏标记点
+   */
   hide () {
     if (!this.marker || this.status === 'hiden') {
       return
@@ -60,7 +64,9 @@ class CoffeeHouse {
     this.marker.hide()
   }
 
-  // 详情弹窗
+  /**
+   * 详情弹窗
+   */
   openInfo () {
     if (!this.infoWindow) {
       const content = `<div class="card" data-bind="click: $parent.displayHouse" src="javascript:;">
@@ -81,7 +87,9 @@ class CoffeeHouse {
     this.infoWindow.open(aMap, this.location)
   }
 
-  // 显示咖啡屋
+  /**
+   * 显示咖啡屋
+   */
   display () {
     aMap.setCenter(this.location)
     aMap.setZoom(18)
@@ -97,9 +105,10 @@ class ViewModel {
   constructor () {
     this.starsLimit = ko.observable(0)
     this.starsList = [5,4,3,2,1,0]
-    this.houses = ko.observableArray()
-    this.isOpened = ko.observable(true)
+    this.houses = ko.observableArray()    // 位置描述列表
+    this.isOpened = ko.observable(true)   // 控制 sidebar 的显示
 
+    // 关于地图显示的常量信息
     this.CENTER = [121.5718769, 29.8600041]
     this.ZOOM_LEVEL = 13
 
@@ -127,6 +136,9 @@ class ViewModel {
       })
     })
 
+    /**
+     * 当过滤条件发生变更是，重新绘制标记点
+     */
     this.starsLimit.subscribe((newValue) => {
       // next ticket
       setTimeout(() => this.renderMarker(), 0)
@@ -147,15 +159,8 @@ class ViewModel {
   }
 
   /**
-   * 地图与数据均加载完成之后，绘制标记点
+   * 显示/隐藏 侧边栏
    */
-  allReady () {
-    if (this.mapStatus() === 'ready' && this.dataStatus() === 'ready') {
-      this.renderMarker()
-      $('.loading').hide()
-    }
-  }
-
   toggle() {
     this.isOpened(!this.isOpened())
   }
@@ -175,22 +180,33 @@ class ViewModel {
     return result.join('')
   }
 
+  /**
+   * 修改过滤条件
+   * @param Number stars 
+   */
   applingFilter (stars) {
     this.starsLimit(stars)
   }
 
+  /**
+   * 绘制标记点
+   */
   renderMarker () {
+    // 显示过滤后的标记点
     this.filteredHouses().forEach((house) => {
       house.show()
     })
-
+    // 隐藏未通过过滤条件的标记点
     this.unfilteredHouses().forEach(house => {
       house.hide()
     })
+    // 重置地图
     aMap.setZoomAndCenter(this.ZOOM_LEVEL, this.CENTER)
   }
 
-  // 载入数据
+  /**
+   * 载入数据
+   */
   loadData () {
     const self = this
     return getCoffeeHouses().then(function (houses) {
@@ -209,10 +225,23 @@ class ViewModel {
     })
   }
 
-  // 地图加载完成
+  /**
+   * 地图加载完成
+   * @param AMap map 
+   */
   mapReady (map) {
     aMap = map
     this.mapStatus('ready')
+  }
+
+  /**
+   * 地图与数据均加载完成之后，绘制标记点
+   */
+  allReady () {
+    if (this.mapStatus() === 'ready' && this.dataStatus() === 'ready') {
+      this.renderMarker()
+      $('.loading').hide()
+    }
   }
 }
 
