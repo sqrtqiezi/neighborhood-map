@@ -1,4 +1,4 @@
-var data = [{
+export const data = [{
   'cadd': '宁波市徐戎路临39号',
   'cname': '河汉咖啡集盒店',
   'logo': '0.png',
@@ -1141,4 +1141,10 @@ var data = [{
   'cafe_id': '173'
 }]
 
-export default data
+export const images = [
+  'http://cdn.hfextreme.cn/michal-parzuchowski-324218.jpg',
+  'http://cdn.hfextreme.cn/nick-hillier-254650.jpg',
+  'http://cdn.hfextreme.cn/mohammad-alizade-4wzRuAb-KWs.jpg',
+  'http://cdn.hfextreme.cn/nathan-dumlao-290152.jpg',
+  'http://cdn.hfextreme.cn/karl-fredrickson-35017.jpg',
+]

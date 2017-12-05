@@ -1,5 +1,5 @@
 import AV from 'leancloud-storage'
-import data from './lib/data'
+import { data, images } from './lib/data'
 
 var APP_ID = 'uJV7RqGIOHpI9yd9eCdLMpq8-9Nh9j0Va'
 var APP_KEY = 'FHXTjXkwtsJwvi7ydGjAeHeH'
@@ -25,7 +25,8 @@ data.forEach(function (item, index) {
       house.set('name', item.cname)
       house.set('address', item.cadd)
       house.set('logo', item.logo)
-      house.set('consumption', getConsumption())
+      house.set('stars', Math.round(Math.random() * 5))
+      house.set('cover', images[Math.floor(Math.random() * 5)])
 
       var location = new AV.GeoPoint(Number(item.position_y), Number(item.position_x))
       house.set('location', location)
