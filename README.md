@@ -3,8 +3,8 @@ Udacity前端项目 - 街区地图
 
 ## 项目目的
 * 了解如何使用 MV 方式组织项目
-* 了解如何一部获取数据
-* 了解 API 服务
+* 了解如何异步获取数据
+* 了解如何使用 API 服务
 
 ## 评审标准
 [https://review.udacity.com/#!/rubrics/501/view](https://review.udacity.com/#!/rubrics/501/view)
